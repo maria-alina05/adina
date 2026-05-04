@@ -86,11 +86,39 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       whatsappMsg += ` Numărul meu: ${phone}`;
 
-      // Build WhatsApp URL - use wa.me with international format (no +)
+      // Build WhatsApp URL
       const whatsappUrl = `https://wa.me/40754243673?text=${encodeURIComponent(whatsappMsg)}`;
 
-      // Redirect directly to WhatsApp
-      window.location.href = whatsappUrl;
+      // Build email fallback (for desktop users without WhatsApp)
+      const emailSubject = encodeURIComponent('Programare consultanță credit');
+      const emailBody = encodeURIComponent(whatsappMsg);
+      const emailUrl = `mailto:adina.spalnacan@fin.imobiliare.ro?subject=${emailSubject}&body=${emailBody}`;
+
+      // Detect mobile
+      const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+
+      if (isMobile) {
+        // On mobile, go directly to WhatsApp app
+        window.location.href = whatsappUrl;
+      } else {
+        // On desktop, show options (WhatsApp Web + Email fallback)
+        contactForm.innerHTML = `
+          <div style="text-align: center; padding: 40px 20px;">
+            <div style="font-size: 3rem; margin-bottom: 16px;">✅</div>
+            <h3 style="margin-bottom: 12px;">Mulțumesc, ${name}!</h3>
+            <p>Alege cum dorești să trimiți mesajul:</p>
+            <p style="margin-top: 20px;">
+              <a href="${whatsappUrl}" target="_blank" rel="noopener" class="btn btn-whatsapp" style="font-size: 1rem;">💬 Trimite prin WhatsApp</a>
+            </p>
+            <p style="margin-top: 12px;">
+              <a href="${emailUrl}" class="btn btn-primary" style="font-size: 1rem;">✉️ Trimite prin Email</a>
+            </p>
+            <p style="margin-top: 12px;">
+              <a href="tel:+40754243673" class="btn btn-phone" style="font-size: 1rem;">📞 Sună: 0754 243 673</a>
+            </p>
+          </div>
+        `;
+      }
     });
   }
 });
