@@ -815,6 +815,12 @@ p {
   }
 }
 
+@media (min-width: 769px) {
+  .btn-whatsapp {
+    display: none;
+  }
+}
+
 @media (max-width: 768px) {
   .nav-links {
     position: fixed;
